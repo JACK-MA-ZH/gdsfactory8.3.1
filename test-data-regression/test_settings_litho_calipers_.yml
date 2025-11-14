@@ -1,0 +1,12 @@
+info: {}
+name: litho_calipers_NS2_5_NS_cf6f4c31
+settings:
+  layer1: WG
+  layer2: SLAB150
+  notch_size:
+  - 2
+  - 5
+  notch_spacing: 2
+  num_notches: 11
+  offset_per_notch: 0.1
+  row_spacing: 0

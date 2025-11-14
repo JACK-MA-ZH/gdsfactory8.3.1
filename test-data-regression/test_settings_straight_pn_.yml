@@ -1,0 +1,9 @@
+info: {}
+name: straight_pin_L2000_CSpn_5e121870
+settings:
+  cross_section: pn
+  length: 2000
+  taper: taper_strip_to_ridge
+  via_stack: via_stack_slab_m3
+  via_stack_spacing: 2
+  via_stack_width: 10

@@ -1,0 +1,41 @@
+instances:
+  text_rectangular_T01_S0_9cc70453_0_m4800:
+    component: text_rectangular
+    info: {}
+    settings:
+      font: rectangular_font
+      justify: left
+      layer: WG
+      layers: null
+      position:
+      - 0
+      - 0
+      size: 0.4
+      text: '01'
+  text_rectangular_TChip__49082c3d_0_m2400:
+    component: text_rectangular
+    info: {}
+    settings:
+      font: rectangular_font
+      justify: left
+      layer: WG
+      layers: null
+      position:
+      - 0
+      - 0
+      size: 0.4
+      text: Chip
+name: text_lines_TChip_01_S0p4_LWG
+nets: []
+placements:
+  text_rectangular_T01_S0_9cc70453_0_m4800:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: -4.8
+  text_rectangular_TChip__49082c3d_0_m2400:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: -2.4
+ports: {}

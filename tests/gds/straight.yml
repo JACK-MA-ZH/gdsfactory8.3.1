@@ -1,0 +1,89 @@
+cells:
+  straight_length1p234:
+    changed:
+      length: 1.234
+    child: null
+    default:
+      add_pins: true
+      cross_section: strip
+      layer: null
+      length: 10.0
+      npoints: 2
+      width: null
+    full:
+      add_pins: true
+      cross_section: strip
+      layer: null
+      length: 1.234
+      npoints: 2
+      width: null
+    function_name: straight
+    info:
+      cross_section: strip
+      length: 1.234
+      route_info:
+        length: 1.234
+        type: strip
+        weight: 1.234
+        strip_length: 1.234
+      width: 0.5
+    info_version: 2
+    module: gdsfactory.components.straight
+    name: straight_length1p234
+name: straight_length1p234
+ports:
+  o1:
+    center:
+      - 0.0
+      - 0.0
+    layer:
+      - 1
+      - 0
+    name: o1
+    orientation: 180.0
+    port_type: optical
+    shear_angle: null
+    width: 0.5
+  o2:
+    center:
+      - 1.234
+      - 0.0
+    layer:
+      - 1
+      - 0
+    name: o2
+    orientation: 0.0
+    port_type: optical
+    shear_angle: null
+    width: 0.5
+settings:
+  changed:
+    length: 1.234
+  child: null
+  default:
+    add_pins: true
+    cross_section: strip
+    layer: null
+    length: 10.0
+    npoints: 2
+    width: null
+  full:
+    add_pins: true
+    cross_section: strip
+    layer: null
+    length: 1.234
+    npoints: 2
+    width: null
+  function_name: straight
+  info:
+    cross_section: strip
+    length: 1.234
+    route_info:
+      length: 1.234
+      type: strip
+      weight: 1.234
+      strip_length: 1.234
+    width: 0.5
+  info_version: 2
+  module: gdsfactory.components.straight
+  name: straight_length1p234

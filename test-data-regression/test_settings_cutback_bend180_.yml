@@ -1,0 +1,10 @@
+info:
+  components: 82
+name: cutback_bend180_Cbend_e_ea441d2d
+settings:
+  cols: 6
+  component: bend_euler180
+  rows: 6
+  spacing: 3
+  straight: straight
+  straight_length: 5

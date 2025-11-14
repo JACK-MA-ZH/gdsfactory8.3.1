@@ -1,0 +1,7 @@
+info: {}
+name: straight_array_N4_S4_L10_CSstrip
+settings:
+  cross_section: strip
+  length: 10
+  n: 4
+  spacing: 4

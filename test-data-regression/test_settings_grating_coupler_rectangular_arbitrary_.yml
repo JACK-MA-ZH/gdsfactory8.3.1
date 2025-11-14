@@ -1,0 +1,36 @@
+info:
+  fiber_angle: 15
+  polarization: te
+  wavelength: 1.55
+name: grating_coupler_rectang_484ead2a
+settings:
+  cross_section: strip
+  fiber_angle: 15
+  gaps:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  length_taper: 150
+  polarization: te
+  slab_offset: 1
+  slab_xmin: -1
+  wavelength: 1.55
+  width_grating: 11
+  widths:
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5

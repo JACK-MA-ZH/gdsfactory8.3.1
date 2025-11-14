@@ -1,0 +1,965 @@
+instances:
+  rectangle_S2_5_LSLAB150_e51fc557_1100_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_12800_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_16700_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_20600_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_24500_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_28400_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_32300_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_36200_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_40100_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_44000_m10000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_44000_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_47900_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_5000_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_51800_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_55700_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_59600_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_63500_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_67400_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_71300_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_75200_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_79100_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_83000_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_86900_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LSLAB150_e51fc557_8900_m5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_0_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_12000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_16000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_20000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_24000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_28000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_32000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_36000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_40000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_4000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_44000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_44000_5000:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_48000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_52000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_56000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_60000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_64000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_68000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_72000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_76000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_80000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_8000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_84000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+  rectangle_S2_5_LWG_CFal_628c0a57_88000_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: false
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 2
+      - 5
+name: litho_calipers_NS2_5_NS_cf6f4c31
+nets: []
+placements:
+  rectangle_S2_5_LSLAB150_e51fc557_1100_m5000:
+    mirror: false
+    rotation: 0
+    x: 1.1
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_12800_m5000:
+    mirror: false
+    rotation: 0
+    x: 12.8
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_16700_m5000:
+    mirror: false
+    rotation: 0
+    x: 16.7
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_20600_m5000:
+    mirror: false
+    rotation: 0
+    x: 20.6
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_24500_m5000:
+    mirror: false
+    rotation: 0
+    x: 24.5
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_28400_m5000:
+    mirror: false
+    rotation: 0
+    x: 28.4
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_32300_m5000:
+    mirror: false
+    rotation: 0
+    x: 32.3
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_36200_m5000:
+    mirror: false
+    rotation: 0
+    x: 36.2
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_40100_m5000:
+    mirror: false
+    rotation: 0
+    x: 40.1
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_44000_m10000:
+    mirror: false
+    rotation: 0
+    x: 44
+    y: -10
+  rectangle_S2_5_LSLAB150_e51fc557_44000_m5000:
+    mirror: false
+    rotation: 0
+    x: 44
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_47900_m5000:
+    mirror: false
+    rotation: 0
+    x: 47.9
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_5000_m5000:
+    mirror: false
+    rotation: 0
+    x: 5
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_51800_m5000:
+    mirror: false
+    rotation: 0
+    x: 51.8
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_55700_m5000:
+    mirror: false
+    rotation: 0
+    x: 55.7
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_59600_m5000:
+    mirror: false
+    rotation: 0
+    x: 59.6
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_63500_m5000:
+    mirror: false
+    rotation: 0
+    x: 63.5
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_67400_m5000:
+    mirror: false
+    rotation: 0
+    x: 67.4
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_71300_m5000:
+    mirror: false
+    rotation: 0
+    x: 71.3
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_75200_m5000:
+    mirror: false
+    rotation: 0
+    x: 75.2
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_79100_m5000:
+    mirror: false
+    rotation: 0
+    x: 79.1
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_83000_m5000:
+    mirror: false
+    rotation: 0
+    x: 83
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_86900_m5000:
+    mirror: false
+    rotation: 0
+    x: 86.9
+    y: -5
+  rectangle_S2_5_LSLAB150_e51fc557_8900_m5000:
+    mirror: false
+    rotation: 0
+    x: 8.9
+    y: -5
+  rectangle_S2_5_LWG_CFal_628c0a57_0_0:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_12000_0:
+    mirror: false
+    rotation: 0
+    x: 12
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_16000_0:
+    mirror: false
+    rotation: 0
+    x: 16
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_20000_0:
+    mirror: false
+    rotation: 0
+    x: 20
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_24000_0:
+    mirror: false
+    rotation: 0
+    x: 24
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_28000_0:
+    mirror: false
+    rotation: 0
+    x: 28
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_32000_0:
+    mirror: false
+    rotation: 0
+    x: 32
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_36000_0:
+    mirror: false
+    rotation: 0
+    x: 36
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_40000_0:
+    mirror: false
+    rotation: 0
+    x: 40
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_4000_0:
+    mirror: false
+    rotation: 0
+    x: 4
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_44000_0:
+    mirror: false
+    rotation: 0
+    x: 44
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_44000_5000:
+    mirror: false
+    rotation: 0
+    x: 44
+    y: 5
+  rectangle_S2_5_LWG_CFal_628c0a57_48000_0:
+    mirror: false
+    rotation: 0
+    x: 48
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_52000_0:
+    mirror: false
+    rotation: 0
+    x: 52
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_56000_0:
+    mirror: false
+    rotation: 0
+    x: 56
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_60000_0:
+    mirror: false
+    rotation: 0
+    x: 60
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_64000_0:
+    mirror: false
+    rotation: 0
+    x: 64
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_68000_0:
+    mirror: false
+    rotation: 0
+    x: 68
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_72000_0:
+    mirror: false
+    rotation: 0
+    x: 72
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_76000_0:
+    mirror: false
+    rotation: 0
+    x: 76
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_80000_0:
+    mirror: false
+    rotation: 0
+    x: 80
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_8000_0:
+    mirror: false
+    rotation: 0
+    x: 8
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_84000_0:
+    mirror: false
+    rotation: 0
+    x: 84
+    y: 0
+  rectangle_S2_5_LWG_CFal_628c0a57_88000_0:
+    mirror: false
+    rotation: 0
+    x: 88
+    y: 0
+ports: {}

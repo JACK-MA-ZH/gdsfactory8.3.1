@@ -1,0 +1,8 @@
+info: {}
+name: triangle_X10_X0_Y20_Y0_LWG
+settings:
+  layer: WG
+  x: 10
+  xtop: 0
+  y: 20
+  ybot: 0

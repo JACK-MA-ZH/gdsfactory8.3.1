@@ -1,0 +1,10 @@
+info: {}
+name: splitter_tree_Cmmi1x2_N_4888501b
+settings:
+  bend_s: bend_s
+  coupler: mmi1x2
+  cross_section: strip
+  noutputs: 4
+  spacing:
+  - 90
+  - 50

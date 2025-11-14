@@ -1,0 +1,13 @@
+info:
+  num_squares: 7.986
+name: optimal_step_SW10_EW22__6d5773d7
+settings:
+  anticrowding_factor: 1.2
+  end_width: 22
+  layer:
+  - 1
+  - 0
+  num_pts: 50
+  start_width: 10
+  symmetric: false
+  width_tol: 0.001

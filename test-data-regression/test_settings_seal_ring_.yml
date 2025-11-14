@@ -1,0 +1,13 @@
+info: {}
+name: seal_ring_S500_500_Svia_d370abe4
+settings:
+  padding: 10
+  seal: via_stack
+  size:
+  - 500
+  - 500
+  width: 10
+  with_east: true
+  with_north: true
+  with_south: true
+  with_west: true

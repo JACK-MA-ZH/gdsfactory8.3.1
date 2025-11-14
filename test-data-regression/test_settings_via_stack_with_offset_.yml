@@ -1,0 +1,12 @@
+info: {}
+name: via_stack_with_offset_L_bf109d5b
+settings:
+  layers:
+  - PPP
+  - M1
+  size:
+  - 10
+  - 10
+  vias:
+  - null
+  - viac

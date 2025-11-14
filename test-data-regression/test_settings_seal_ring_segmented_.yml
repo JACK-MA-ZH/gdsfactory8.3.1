@@ -1,0 +1,15 @@
+info: {}
+name: seal_ring_segmented_S50_1db576ee
+settings:
+  corner: via_stack_corner45_extended
+  length_segment: 10
+  size:
+  - 500
+  - 500
+  spacing_segment: 2
+  via_stack: via_stack_m1_mtop
+  width_segment: 3
+  with_east: true
+  with_north: true
+  with_south: true
+  with_west: true

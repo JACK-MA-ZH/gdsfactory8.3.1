@@ -1,0 +1,19 @@
+info: {}
+name: polarization_splitter_r_dbc5fe0d
+settings:
+  cross_section: strip
+  dy: 5
+  gap: 0.15
+  length_coupler: 7
+  length_out: 14.33
+  length_taper_in:
+  - 4
+  - 44
+  width_coupler:
+  - 0.9
+  - 0.404
+  width_out: 0.54
+  width_taper_in:
+  - 0.54
+  - 0.69
+  - 0.83

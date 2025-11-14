@@ -1,0 +1,116 @@
+instances:
+  rectangle_S0p3_0p3_LSLA_62b062b0_m5070_m5070:
+    array:
+      column_pitch: 0.58
+      columns: 18
+      row_pitch: 0.58
+      rows: 18
+    component: rectangle
+    info: {}
+    settings:
+      centered: true
+      layer: SLAB150
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 0.3
+      - 0.3
+  rectangle_S11_11_LWG_CT_2ab7e8cb_0_0:
+    component: rectangle
+    info: {}
+    settings:
+      centered: true
+      layer: WG
+      port_orientations:
+      - 180
+      - 90
+      - 0
+      - -90
+      port_type: null
+      size:
+      - 11
+      - 11
+  taper_L150_W0p5_W10_LNo_29b81de7_0_m155500:
+    component: taper
+    info:
+      length: 150
+      width1: 0.5
+      width2: 10
+    settings:
+      cross_section: strip
+      layer: null
+      length: 150
+      port: null
+      port_names:
+      - o1
+      - o2
+      port_types:
+      - optical
+      - optical
+      width1: 0.5
+      width2: 10
+      with_bbox: true
+      with_two_ports: true
+  taper_L150_W0p5_W10_LNo_29b81de7_m155500_0:
+    component: taper
+    info:
+      length: 150
+      width1: 0.5
+      width2: 10
+    settings:
+      cross_section: strip
+      layer: null
+      length: 150
+      port: null
+      port_names:
+      - o1
+      - o2
+      port_types:
+      - optical
+      - optical
+      width1: 0.5
+      width2: 10
+      with_bbox: true
+      with_two_ports: true
+name: grating_coupler_dual_po_45d03cc3
+nets: []
+placements:
+  rectangle_S0p3_0p3_LSLA_62b062b0_m5070_m5070:
+    mirror: false
+    rotation: 0
+    x: -5.07
+    y: -5.07
+  rectangle_S11_11_LWG_CT_2ab7e8cb_0_0:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 0
+  taper_L150_W0p5_W10_LNo_29b81de7_0_m155500:
+    mirror: false
+    rotation: 90
+    x: 0
+    y: -155.5
+  taper_L150_W0p5_W10_LNo_29b81de7_m155500_0:
+    mirror: false
+    rotation: 0
+    x: -155.5
+    y: 0
+ports:
+  o1: taper_L150_W0p5_W10_LNo_29b81de7_m155500_0,o1
+  o2: taper_L150_W0p5_W10_LNo_29b81de7_0_m155500,o1
+warnings:
+  optical:
+    unconnected_ports:
+    - message: 2 unconnected optical ports!
+      ports:
+      - taper_L150_W0p5_W10_LNo_29b81de7_m155500_0,o2
+      - taper_L150_W0p5_W10_LNo_29b81de7_0_m155500,o2
+      values:
+      - - -5500
+        - 0
+      - - 0
+        - -5500

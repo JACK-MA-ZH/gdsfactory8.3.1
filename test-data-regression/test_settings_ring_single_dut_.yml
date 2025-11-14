@@ -1,0 +1,12 @@
+info: {}
+name: ring_single_dut_Cstraig_3023a85c
+settings:
+  bend: bend_euler
+  component: straight
+  coupler: coupler_ring
+  gap: 0.2
+  length_x: 4
+  length_y: 0
+  port_name: o1
+  radius: 5
+  with_component: true

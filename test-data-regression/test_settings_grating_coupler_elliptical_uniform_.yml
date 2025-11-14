@@ -1,0 +1,8 @@
+info:
+  polarization: te
+  wavelength: 1.554
+name: grating_coupler_ellipti_961359c2
+settings:
+  fill_factor: 0.5
+  n_periods: 20
+  period: 0.75

@@ -1,0 +1,213 @@
+instances:
+  straight_L420_N2_CSstri_a09f3e8d_0_1350:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_150:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_1950:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_2550:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_3150:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_3750:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_4350:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_4950:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_5550:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  straight_L420_N2_CSstri_a09f3e8d_0_750:
+    component: straight
+    info:
+      length: 420
+      route_info_length: 420
+      route_info_type: xs_f6f850f9
+      route_info_weight: 420
+      route_info_xs_f6f850f9_length: 420
+      width: 0.3
+    settings:
+      cross_section: strip_no_ports
+      length: 420
+      npoints: 2
+      width: 0.3
+  text_rectangular_T300_3_f521bc80_425000_0:
+    component: text_rectangular
+    info: {}
+    settings:
+      font: rectangular_font
+      justify: left
+      layer: WG
+      layers: null
+      position:
+      - 0
+      - 0
+      size: 1
+      text: 300 300
+name: cdsem_straight_density__f4d5e4c9
+nets: []
+placements:
+  straight_L420_N2_CSstri_a09f3e8d_0_1350:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 1.35
+  straight_L420_N2_CSstri_a09f3e8d_0_150:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 0.15
+  straight_L420_N2_CSstri_a09f3e8d_0_1950:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 1.95
+  straight_L420_N2_CSstri_a09f3e8d_0_2550:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 2.55
+  straight_L420_N2_CSstri_a09f3e8d_0_3150:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 3.15
+  straight_L420_N2_CSstri_a09f3e8d_0_3750:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 3.75
+  straight_L420_N2_CSstri_a09f3e8d_0_4350:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 4.35
+  straight_L420_N2_CSstri_a09f3e8d_0_4950:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 4.95
+  straight_L420_N2_CSstri_a09f3e8d_0_5550:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 5.55
+  straight_L420_N2_CSstri_a09f3e8d_0_750:
+    mirror: false
+    rotation: 0
+    x: 0
+    y: 0.75
+  text_rectangular_T300_3_f521bc80_425000_0:
+    mirror: false
+    rotation: 0
+    x: 425
+    y: 0
+ports: {}

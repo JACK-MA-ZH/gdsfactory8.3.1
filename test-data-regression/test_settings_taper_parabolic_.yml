@@ -1,0 +1,9 @@
+info: {}
+name: taper_parabolic_L20_W0p_1bd7248b
+settings:
+  exp: 0.5
+  layer: WG
+  length: 20
+  npoints: 100
+  width1: 0.5
+  width2: 5

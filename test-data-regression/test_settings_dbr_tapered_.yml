@@ -1,0 +1,14 @@
+info: {}
+name: dbr_tapered_L10_P0p85_D_9872475d
+settings:
+  cross_section: strip
+  dc: 0.5
+  fin_size:
+  - 0.2
+  - 0.05
+  fins: false
+  length: 10
+  period: 0.85
+  taper_length: 20
+  w1: 0.4
+  w2: 1

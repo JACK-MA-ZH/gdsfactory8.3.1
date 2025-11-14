@@ -1,0 +1,9 @@
+info: {}
+name: terminator_L50_CSIstrip_a7ffecd8
+settings:
+  cross_section_input: strip
+  doping_layers:
+  - NPP
+  doping_offset: 1
+  length: 50
+  tapered_width: 0.2

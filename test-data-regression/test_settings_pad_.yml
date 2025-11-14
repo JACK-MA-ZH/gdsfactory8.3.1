@@ -1,0 +1,20 @@
+info:
+  size:
+  - 100
+  - 100
+  xsize: 100
+  ysize: 100
+name: pad_S100_100_LMTOP_BLNo_163fd346
+settings:
+  layer: MTOP
+  port_inclusion: 0
+  port_orientation: 0
+  port_orientations:
+  - 180
+  - 90
+  - 0
+  - -90
+  port_type: pad
+  size:
+  - 100
+  - 100

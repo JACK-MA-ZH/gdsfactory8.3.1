@@ -1,0 +1,14 @@
+info: {}
+name: mmi_I1_O4_WNone_WT1_LT1_a39e18df
+settings:
+  cross_section: strip
+  gap_input_tapers: 0.25
+  gap_output_tapers: 0.25
+  inputs: 1
+  length_mmi: 5.5
+  length_taper: 10
+  outputs: 4
+  straight: straight
+  taper: taper
+  width_mmi: 5
+  width_taper: 1

@@ -1,0 +1,14 @@
+info: {}
+name: rectangle_S10p4_10p4_LT_59c342c9
+settings:
+  centered: true
+  layer: TE
+  port_orientations:
+  - 180
+  - 90
+  - 0
+  - -90
+  port_type: electrical
+  size:
+  - 10.4
+  - 10.4

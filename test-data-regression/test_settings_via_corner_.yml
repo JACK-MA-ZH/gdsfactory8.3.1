@@ -1,0 +1,19 @@
+info:
+  length: 10
+  size:
+  - 10
+  - 10
+name: via_corner_CSmetal2_0_1_37dda7c7
+settings:
+  cross_section:
+  - - metal2
+    - - 0
+      - 180
+  - - metal3
+    - - 90
+      - 270
+  layers_labels:
+  - m2
+  - m3
+  vias:
+  - via1

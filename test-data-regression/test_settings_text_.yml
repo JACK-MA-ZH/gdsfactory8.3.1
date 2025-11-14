@@ -1,0 +1,10 @@
+info: {}
+name: text_Tabcd_S10_P0_0_Jleft_LWG
+settings:
+  justify: left
+  layer: WG
+  position:
+  - 0
+  - 0
+  size: 10
+  text: abcd

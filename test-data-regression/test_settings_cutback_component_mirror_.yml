@@ -1,0 +1,15 @@
+info:
+  components: 80
+name: cutback_component_Ctape_13a5b25d
+settings:
+  bend180: bend_euler180
+  cols: 4
+  component: taper_0p5_to_3_l36
+  cross_section: strip
+  mirror: true
+  mirror1: false
+  mirror2: false
+  port1: o1
+  port2: o2
+  rows: 5
+  straight: straight

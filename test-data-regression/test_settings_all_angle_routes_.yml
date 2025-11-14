@@ -1,0 +1,5 @@
+function: all_angle_routes
+info: {}
+module: yaml_jinja
+name: all_angle_routes
+settings: {}

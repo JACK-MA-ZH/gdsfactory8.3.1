@@ -1,0 +1,12 @@
+info: {}
+name: edge_coupler_array_ECed_0e2b58eb
+settings:
+  edge_coupler: edge_coupler_silicon
+  n: 5
+  pitch: 127
+  text: text_rectangular
+  text_offset:
+  - 10
+  - 20
+  text_rotation: 0
+  x_reflection: false

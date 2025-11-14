@@ -1,0 +1,8 @@
+info: {}
+name: text_lines_TChip_01_S0p4_LWG
+settings:
+  layer: WG
+  size: 0.4
+  text:
+  - Chip
+  - '01'

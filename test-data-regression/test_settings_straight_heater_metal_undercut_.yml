@@ -1,0 +1,17 @@
+info:
+  length: 320
+  resistance: 0
+name: straight_heater_metal_u_22706e47
+settings:
+  cross_section: strip
+  cross_section_heater: heater_metal
+  cross_section_heater_undercut: strip_heater_metal_undercut
+  cross_section_waveguide_heater: strip_heater_metal
+  heater_taper_length: 5
+  length: 320
+  length_straight: 0.1
+  length_straight_input: 15
+  length_undercut: 30
+  length_undercut_spacing: 6
+  via_stack: via_stack_heater_mtop
+  with_undercut: true

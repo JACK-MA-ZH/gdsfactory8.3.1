@@ -1,0 +1,12 @@
+info: {}
+name: nxn_W1_E4_N0_S0_X8_Y8_W_96626965
+settings:
+  east: 4
+  layer: WG
+  north: 0
+  south: 0
+  west: 1
+  wg_margin: 1
+  wg_width: 0.5
+  xsize: 8
+  ysize: 8

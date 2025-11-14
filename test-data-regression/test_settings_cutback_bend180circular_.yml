@@ -1,0 +1,10 @@
+info:
+  components: 82
+name: cutback_bend180_Cbend_c_4744a38c
+settings:
+  cols: 6
+  component: bend_circular180
+  rows: 6
+  spacing: 3
+  straight: straight
+  straight_length: 5

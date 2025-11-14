@@ -1,0 +1,21 @@
+info: {}
+name: mzi_pads_center_PTstrai_10e9fd66
+settings:
+  cross_section: strip
+  cross_section_metal: metal_routing
+  delta_length: 40
+  length_x: 500
+  length_y: 40
+  mzi: mzi
+  mzi_gnd_bot: bot_r_e2
+  mzi_gnd_top: top_l_e2
+  mzi_sig_bot: bot_l_e2
+  mzi_sig_top: top_r_e2
+  pad: pad_small
+  pad_gnd_bot: e4_1_2
+  pad_gnd_top: e2_1_2
+  pad_pitch: pad_pitch
+  pad_sig_bot: e1_1_1
+  pad_sig_top: e3_1_3
+  ps_bot: straight_heater_metal
+  ps_top: straight_heater_metal

@@ -1,0 +1,10 @@
+info: {}
+name: text_rectangular_multi__068a5741
+settings:
+  layers:
+  - WG
+  - M1
+  - M2
+  - MTOP
+  text: abcd
+  text_factory: text_rectangular

@@ -1,0 +1,12 @@
+info: {}
+name: greek_cross_L30_LWG_N_W_0e8f7afb
+settings:
+  layer_index: 0
+  layers:
+  - WG
+  - N
+  length: 30
+  via_stack: via_stack_npp_m1
+  widths:
+  - 2
+  - 3

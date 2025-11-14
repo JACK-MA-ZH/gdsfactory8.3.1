@@ -1,0 +1,13 @@
+info: {}
+name: mode_converter_G0p3_L10_0aabb81a
+settings:
+  bend: Fbend_s_Mgdsfactorypcomponentspbendspbend_s_SS25_3
+  coupler_straight_asymmetric: coupler_straight_asymmetric
+  cross_section: strip
+  gap: 0.3
+  length: 10
+  mc_mm_width: 1
+  mm_width: 1.2
+  sm_width: 0.5
+  taper: taper
+  taper_length: 25

@@ -1,0 +1,10 @@
+info: {}
+name: splitter_tree_CFmzi_Mgd_4d8fa7c0
+settings:
+  bend_s: bend_s
+  coupler: Fmzi_Mgdsfactorypcomponentspmzispmzi_SCmmi2x2_PECo3_PECo4_DL0_SXTstraight_heater_metal_LXNone
+  cross_section: strip
+  noutputs: 4
+  spacing:
+  - 500
+  - 100

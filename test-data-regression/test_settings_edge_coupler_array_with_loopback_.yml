@@ -1,0 +1,15 @@
+info: {}
+name: edge_coupler_array_with_0e29eb5f
+settings:
+  cross_section: strip
+  edge_coupler: edge_coupler_silicon
+  extension_length: 1
+  n: 8
+  pitch: 127
+  radius: 30
+  text: text_rectangular
+  text_offset:
+  - 0
+  - 10
+  text_rotation: 0
+  x_reflection: false
