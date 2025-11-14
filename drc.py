@@ -36,9 +36,10 @@ except ImportError:  # pragma: no cover - defensive fallback
     GDSComponent = Any
 
 if GDS_INSTALLED:
-    from drc_tool import component_to_pil_image
+    from drc_tool import component_to_pil_image, get_ref_shapes
 else:  # pragma: no cover - fallback when gdsfactory missing
     component_to_pil_image = None
+    get_ref_shapes = None
 
 
 def _iter_references(comp: GDSComponent) -> Iterable[Any]:  # pragma: no cover - helper
@@ -58,6 +59,16 @@ def _ensure_reference_names(comp: GDSComponent) -> None:
         if not getattr(reference, "name", None):
             reference.name = f"p{index}"
         comp.named_instances[reference.name] = reference
+
+
+def _get_kdb_cell(component: GDSComponent) -> Any:
+    """Return the underlying :class:`klayout.db.Cell` for ``component``."""
+
+    if hasattr(component, "kdb_cell"):
+        return component.kdb_cell
+    if hasattr(component, "_kdb_cell"):
+        return component._kdb_cell
+    return getattr(component, "cell", None)
 
 
 class DRCToolEnv(BaseImageToolEnv):
@@ -155,7 +166,25 @@ class DRCToolEnv(BaseImageToolEnv):
                 if layer_index < 0:
                     errors: List[Dict[str, Any]] = []
                 else:
-                    region = kdb.Region(component.kdb_cell.begin_shapes_rec(layer_index))
+                    region = kdb.Region()
+                    kdb_cell = _get_kdb_cell(component)
+                    if kdb_cell is not None:
+                        region += kdb.Region(kdb_cell.shapes(layer_index))
+
+                    references = getattr(component, "named_instances", None)
+                    if isinstance(references, dict) and references:
+                        refs_iter: Iterable[Any] = references.values()
+                    else:
+                        refs_iter = _iter_references(component)
+
+                    if get_ref_shapes is None:
+                        raise RuntimeError("get_ref_shapes helper unavailable; check drc_tool import")
+
+                    for ref in refs_iter:
+                        try:
+                            region += get_ref_shapes(ref, layer_index)
+                        except Exception:
+                            continue
                     errors = []
 
                     spacing_pairs = list(region.space_check(min_spacing / dbu).each())

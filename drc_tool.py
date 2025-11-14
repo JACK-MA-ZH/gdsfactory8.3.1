@@ -21,9 +21,34 @@ from PIL import Image
 
 import gdsfactory as gf
 from gdsfactory import get_layer
-from gdsfactory.boolean import get_ref_shapes
 from gdsfactory.typings import component
 import klayout.db as kdb
+# ``get_ref_shapes`` was introduced after gdsfactory==8.3.1.  The public
+# API for :mod:`drc_tool` only needs a small subset of its functionality, so we
+# provide a light-weight fallback when running against the older release.
+try:  # pragma: no cover - exercised indirectly via the CLI scripts
+    from gdsfactory.boolean import get_ref_shapes
+except ImportError:  # pragma: no cover - compatibility shim for gf==8.3.1
+    def get_ref_shapes(reference: component, layer: int | tuple[int, int]) -> kdb.Region:
+        """Return the shapes of ``reference`` on ``layer`` as a ``kdb.Region``.
+
+        ``gdsfactory`` 8.3.1 does not ship ``get_ref_shapes``.  The helper is
+        implemented here so that the rest of the toolchain can stay agnostic to
+        the installed version.  Only the functionality that is required by the
+        DRC tools is reproduced: extract the polygons for the provided
+        component reference and apply its transformation.
+        """
+
+        layer_index = get_layer(layer)
+        ref_cell = getattr(reference, "cell", None)
+        if ref_cell is None:
+            raise TypeError("reference must provide a 'cell' attribute with shapes")
+
+        region = kdb.Region(ref_cell.begin_shapes_rec(layer_index))
+        cplx_trans = getattr(reference, "cplx_trans", None)
+        if cplx_trans is not None:
+            region = region.transformed(cplx_trans)
+        return region
 
 try:  # pragma: no cover - optional dependency when running outside the agent stack
     from agent_r1.tool.base import BaseTool
@@ -37,6 +62,29 @@ except ImportError:  # pragma: no cover - simple fallback for local testing
 
 _COLOR_CYCLE = plt.rcParams.get("axes.prop_cycle", None)
 POLYGON_LABELS_KEY = "polygon_labels"
+
+
+def _install_component_attribute(name: str) -> None:
+    """Allow dynamic attributes on :class:`gf.Component` for legacy scripts."""
+
+    existing = getattr(gf.Component, name, None)
+    original_getter = existing.fget if isinstance(existing, property) else None
+    storage_name = f"_drc_{name}"
+
+    def _getter(self: gf.Component) -> Any:
+        return getattr(self, storage_name, None)
+
+    def _setter(self: gf.Component, value: Any) -> None:
+        object.__setattr__(self, storage_name, value)
+
+    setattr(gf.Component, name, property(_getter, _setter))
+
+    if original_getter is not None:
+        setattr(gf.Component, f"_original_{name}", property(original_getter))
+
+
+for _attr in ("named_instances", "named_references"):
+    _install_component_attribute(_attr)
 
 
 def _iter_references(comp: component) -> Iterable[gf.ComponentReference]:
@@ -67,12 +115,23 @@ def _remove_reference_name(component: component, name: str) -> None:
 
 
 def _remove_reference(component: component, reference: gf.ComponentReference) -> None:
-    if hasattr(component, "insts") and reference in component.insts:
-        component.insts.remove(reference)
-    elif hasattr(component, "references") and reference in component.references:
-        component.references.remove(reference)
-    else:
-        raise ValueError("Component reference not found; cannot remove.")
+    if hasattr(component, "insts"):
+        target = getattr(reference, "_kfinst", reference)
+        try:
+            del component.insts[target]
+            return
+        except Exception:
+            pass
+
+    if hasattr(component, "references"):
+        refs = component.references
+        try:
+            refs.remove(reference)
+            return
+        except (AttributeError, ValueError):
+            pass
+
+    raise ValueError("Component reference not found; cannot remove.")
 
 
 def polygon_centroid(points: np.ndarray) -> Tuple[float, float]:
