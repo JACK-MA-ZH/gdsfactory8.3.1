@@ -594,6 +594,7 @@ class SplitPolygonTool(DRCBaseTool):
     @staticmethod
     def _build_half_plane_masks(
         reference: gf.ComponentReference,
+        polygon_name: str,
         axis: str,
         value: float,
         layer: tuple[int, int],
@@ -607,8 +608,8 @@ class SplitPolygonTool(DRCBaseTool):
         span_y = abs(ymax - ymin)
         margin = max(span_x, span_y, 1.0) * 2.0
 
-        low = gf.Component(name="split_half_low")
-        high = gf.Component(name="split_half_high")
+        low = gf.Component(name=f"{polygon_name}_split_half_low")
+        high = gf.Component(name=f"{polygon_name}_split_half_high")
 
         if axis == "x":
             x_low = min(xmin - margin, value - margin)
@@ -659,7 +660,13 @@ class SplitPolygonTool(DRCBaseTool):
         layer_index = get_layer(layer_tuple)
         region = get_ref_shapes(reference, layer_index)
 
-        low_mask, high_mask = self._build_half_plane_masks(reference, axis, value, layer_tuple)
+        low_mask, high_mask = self._build_half_plane_masks(
+            reference,
+            polygon_name,
+            axis,
+            value,
+            layer_tuple,
+        )
         low_region = _component_region(low_mask, layer_index)
         high_region = _component_region(high_mask, layer_index)
 
