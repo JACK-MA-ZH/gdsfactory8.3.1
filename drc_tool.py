@@ -177,11 +177,42 @@ def polygon_centroid(points: np.ndarray) -> Tuple[float, float]:
     return float(cx), float(cy)
 
 
+def _active_reference_names(component_to_plot: component) -> set[str]:
+    """Return the set of currently active reference names on ``component_to_plot``."""
+
+    names: set[str] = set()
+    named_instances = getattr(component_to_plot, "named_instances", None)
+    if isinstance(named_instances, dict):
+        for name, reference in named_instances.items():
+            if reference is not None and name:
+                names.add(str(name))
+
+    if not names:
+        for reference in _iter_references(component_to_plot):
+            ref_name = getattr(reference, "name", None)
+            if ref_name:
+                names.add(str(ref_name))
+
+    return names
+
+
 def _build_label_lookup(component_to_plot: component) -> List[Dict[str, object]]:
     labels = getattr(component_to_plot, "info", {}).get(POLYGON_LABELS_KEY, [])
-    if isinstance(labels, Iterable):
-        return [dict(entry) for entry in labels]
-    return []
+    if not isinstance(labels, Iterable):
+        return []
+
+    active_names = _active_reference_names(component_to_plot)
+    filtered: List[Dict[str, object]] = []
+    for entry in labels:
+        if not isinstance(entry, dict):
+            continue
+        entry_name = entry.get("name")
+        if entry_name:
+            entry_name = str(entry_name)
+            if active_names and entry_name not in active_names:
+                continue
+        filtered.append(dict(entry, name=entry_name))
+    return filtered
 
 
 def _find_polygon_label(
