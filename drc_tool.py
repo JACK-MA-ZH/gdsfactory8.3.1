@@ -160,6 +160,13 @@ def _remove_reference(component: component, reference: gf.ComponentReference) ->
         raise ValueError("Component reference not found; cannot remove.")
 
 
+def _component_region(comp: gf.Component, layer_index: int) -> kdb.Region:
+    """Return a :class:`kdb.Region` containing the shapes on ``layer_index``."""
+
+    cell = _get_kdb_cell(comp)
+    return kdb.Region(cell.begin_shapes_rec(layer_index))
+
+
 def _get_kdb_cell(comp: gf.Component) -> kdb.Cell:
     cell = getattr(comp, "kdb_cell", None)
     if cell is None:
@@ -216,6 +223,11 @@ def _active_reference_names(component_to_plot: component) -> set[str]:
                 names.add(str(ref_name))
 
     return names
+
+
+def _log_reference_inventory(component_to_plot: component, context: str) -> None:
+    names = sorted(_active_reference_names(component_to_plot))
+    print(f"[drc_tool] {context} active references: {names}")
 
 
 def _build_label_lookup(component_to_plot: component) -> List[Dict[str, object]]:
@@ -644,20 +656,34 @@ class SplitPolygonTool(DRCBaseTool):
 
         reference = self._get_reference(component, polygon_name)
 
+        layer_index = get_layer(layer_tuple)
+        region = get_ref_shapes(reference, layer_index)
+
         low_mask, high_mask = self._build_half_plane_masks(reference, axis, value, layer_tuple)
-        first_half = gf.boolean(reference, low_mask, operation="and", layer=layer_tuple)
-        second_half = gf.boolean(reference, high_mask, operation="and", layer=layer_tuple)
+        low_region = _component_region(low_mask, layer_index)
+        high_region = _component_region(high_mask, layer_index)
+
+        first_region = region & low_region
+        second_region = region & high_region
 
         _remove_reference(component, reference)
         _remove_reference_name(component, polygon_name)
 
         new_refs: List[str] = []
-        if first_half.get_polygons():
-            ref_first = component.add_ref(first_half, name=f"{polygon_name}_part1")
+
+        if not first_region.is_empty():
+            first_component = gf.Component(name=f"{polygon_name}_part1")
+            first_cell = _get_kdb_cell(first_component)
+            first_cell.shapes(layer_index).insert(first_region)
+            ref_first = component.add_ref(first_component, name=first_component.name)
             _register_reference_name(component, ref_first.name, ref_first)
             new_refs.append(ref_first.name)
-        if second_half.get_polygons():
-            ref_second = component.add_ref(second_half, name=f"{polygon_name}_part2")
+
+        if not second_region.is_empty():
+            second_component = gf.Component(name=f"{polygon_name}_part2")
+            second_cell = _get_kdb_cell(second_component)
+            second_cell.shapes(layer_index).insert(second_region)
+            ref_second = component.add_ref(second_component, name=second_component.name)
             _register_reference_name(component, ref_second.name, ref_second)
             new_refs.append(ref_second.name)
 
@@ -691,6 +717,7 @@ def _run_tool_and_plot(
     """Execute a tool, plot the result, and persist the figure."""
 
     result = tool.execute(args=args, component=comp)
+    _log_reference_inventory(comp, context=title)
     fig, _ax = plot_with_labels_and_vertices(comp, title=title)
     output_path = output_dir / f"{title.replace(' ', '_').lower()}.png"
     fig.savefig(output_path, dpi=150, bbox_inches="tight")

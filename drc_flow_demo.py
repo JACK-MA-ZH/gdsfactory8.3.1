@@ -54,6 +54,16 @@ def _bbox_dimensions_um(reference, dbu: float) -> Tuple[float, float]:
     return float(width), float(height)
 
 
+def _log_demo_references(component, stage: str) -> None:
+    named_instances = getattr(component, "named_instances", None)
+    if isinstance(named_instances, dict):
+        names = [name for name, ref in named_instances.items() if ref is not None]
+    else:
+        references = getattr(component, "references", [])
+        names = [getattr(ref, "name", "") for ref in references if getattr(ref, "name", None)]
+    print(f"[drc_flow_demo] {stage} active references: {sorted(names)}")
+
+
 def _execute_tool(
     env: DRCToolEnv,
     tool_calls: list[dict],
@@ -122,6 +132,7 @@ def main() -> None:
     )
 
     component = env.components[0]
+    _log_demo_references(component, "after split")
     named_instances = getattr(component, "named_instances", None)
     _assert_true(isinstance(named_instances, dict), "Component missing named reference map")
     dbu = component.kcl.dbu
@@ -149,6 +160,7 @@ def main() -> None:
         artifact_label="02_after_move",
         artifacts_dir=artifacts_dir,
     )
+    _log_demo_references(component, "after move")
 
     post_move_center = tuple(named_instances["p1_part1"].center)
     dx_applied = post_move_center[0] - pre_move_center[0]
@@ -178,6 +190,7 @@ def main() -> None:
         artifact_label="03_after_offset",
         artifacts_dir=artifacts_dir,
     )
+    _log_demo_references(component, "after offset")
 
     post_offset_width, post_offset_height = _bbox_dimensions_um(named_instances["p1_part2"], dbu)
     expected_delta = 2.0 * OFFSET_DISTANCE
@@ -209,6 +222,7 @@ def main() -> None:
         artifact_label="04_after_delete",
         artifacts_dir=artifacts_dir,
     )
+    _log_demo_references(component, "after delete")
 
     _assert_true(
         "p1_part2" not in named_instances,
