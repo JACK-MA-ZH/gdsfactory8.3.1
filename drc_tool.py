@@ -114,7 +114,26 @@ def _remove_reference_name(component: component, name: str) -> None:
     mapping.pop(name, None)
 
 
+def _destroy_layout_instance(reference: gf.ComponentReference) -> bool:
+    """Try to destroy the underlying KLayout instance for ``reference``."""
+
+    candidate = getattr(reference, "_kfinst", reference)
+    candidate = getattr(candidate, "_instance", candidate)
+    for method_name in ("delete", "destroy"):
+        method = getattr(candidate, method_name, None)
+        if method is None:
+            continue
+        try:
+            method()
+            return True
+        except Exception:
+            continue
+    return False
+
+
 def _remove_reference(component: component, reference: gf.ComponentReference) -> None:
+    removed = False
+
     insts = getattr(component, "insts", None)
     if insts is not None:
         try:
@@ -123,7 +142,7 @@ def _remove_reference(component: component, reference: gf.ComponentReference) ->
             # low-level ``_kfinst`` handle (as newer versions do) does not work
             # on gdsfactory 8.3.1 because the container maintains its own list.
             del insts[reference]
-            return
+            removed = True
         except Exception:
             pass
 
@@ -131,11 +150,14 @@ def _remove_reference(component: component, reference: gf.ComponentReference) ->
     if refs is not None:
         try:
             refs.remove(reference)
-            return
+            removed = True
         except (AttributeError, ValueError):
             pass
 
-    raise ValueError("Component reference not found; cannot remove.")
+    layout_removed = _destroy_layout_instance(reference)
+
+    if not removed and not layout_removed:
+        raise ValueError("Component reference not found; cannot remove.")
 
 
 def _get_kdb_cell(comp: gf.Component) -> kdb.Cell:
