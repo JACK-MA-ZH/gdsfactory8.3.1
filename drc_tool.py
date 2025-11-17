@@ -115,16 +115,20 @@ def _remove_reference_name(component: component, name: str) -> None:
 
 
 def _remove_reference(component: component, reference: gf.ComponentReference) -> None:
-    if hasattr(component, "insts"):
-        target = getattr(reference, "_kfinst", reference)
+    insts = getattr(component, "insts", None)
+    if insts is not None:
         try:
-            del component.insts[target]
+            # ``ComponentReferences`` implements ``__delitem__`` and expects the
+            # actual reference object (or integer index).  Relying on the
+            # low-level ``_kfinst`` handle (as newer versions do) does not work
+            # on gdsfactory 8.3.1 because the container maintains its own list.
+            del insts[reference]
             return
         except Exception:
             pass
 
-    if hasattr(component, "references"):
-        refs = component.references
+    refs = getattr(component, "references", None)
+    if refs is not None:
         try:
             refs.remove(reference)
             return
@@ -132,6 +136,15 @@ def _remove_reference(component: component, reference: gf.ComponentReference) ->
             pass
 
     raise ValueError("Component reference not found; cannot remove.")
+
+
+def _get_kdb_cell(comp: gf.Component) -> kdb.Cell:
+    cell = getattr(comp, "kdb_cell", None)
+    if cell is None:
+        cell = getattr(comp, "_kdb_cell", None)
+    if cell is None:
+        raise AttributeError("Component does not expose a KLayout cell")
+    return cell
 
 
 def polygon_centroid(points: np.ndarray) -> Tuple[float, float]:
@@ -465,7 +478,8 @@ class OffsetPolygonTool(DRCBaseTool):
         _remove_reference_name(component, polygon_name)
 
         new_component = gf.Component(name=f"{polygon_name}_offset")
-        new_component.kdb_cell.shapes(layer_index).insert(region)
+        target_cell = _get_kdb_cell(new_component)
+        target_cell.shapes(layer_index).insert(region)
 
         new_reference = component.add_ref(new_component, name=polygon_name)
         _register_reference_name(component, polygon_name, new_reference)

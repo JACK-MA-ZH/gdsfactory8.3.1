@@ -6,16 +6,22 @@ import json
 import math
 import shutil
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Tuple
 
 from PIL import Image
 
 from drc import DRCToolEnv
 from drc_data_preprocess import create_drc_dataset
-from drc_tool import MovePolygonTool, SplitPolygonTool
+from drc_tool import (
+    DeletePolygonTool,
+    MovePolygonTool,
+    OffsetPolygonTool,
+    SplitPolygonTool,
+)
 
-MOVE_DX = -0.08
+MOVE_DX = -0.12
 MOVE_DY = 0.0
+OFFSET_DISTANCE = 0.04
 
 
 def _format_tool_calls(calls: list[dict]) -> str:
@@ -41,6 +47,30 @@ def _assert_tool_success(successes: Iterable[bool], tool_name: str) -> None:
     _assert_true(all(flags), f"{tool_name} reported failure: {flags}")
 
 
+def _bbox_dimensions_um(reference, dbu: float) -> Tuple[float, float]:
+    bbox = reference.bbox()
+    width = (bbox.right - bbox.left) * dbu
+    height = (bbox.top - bbox.bottom) * dbu
+    return float(width), float(height)
+
+
+def _execute_tool(
+    env: DRCToolEnv,
+    tool_calls: list[dict],
+    *,
+    tool_name: str,
+    artifact_label: str,
+    artifacts_dir: Path,
+):
+    formatted_calls = _format_tool_calls(tool_calls)
+    responses, images, successes, active = env.step(formatted_calls)
+    _assert_true(active[0], f"Environment reported inactive batch entry during {tool_name}")
+    _assert_tool_success(successes[0], tool_name)
+    print(f"{tool_name} response:", responses[0])
+    _save_image(images[0], artifacts_dir, artifact_label)
+    return responses[0]
+
+
 def main() -> None:
     data_root = Path("demo_drc_data")
     if data_root.exists():
@@ -55,7 +85,12 @@ def main() -> None:
     artifacts_dir = data_root / "demo_artifacts"
 
     env = DRCToolEnv(
-        tools=[SplitPolygonTool(), MovePolygonTool()],
+        tools=[
+            SplitPolygonTool(),
+            MovePolygonTool(),
+            OffsetPolygonTool(),
+            DeletePolygonTool(),
+        ],
         max_tool_response_length=2048,
         data_root_dir=str(data_root),
     )
@@ -78,15 +113,18 @@ def main() -> None:
         }
     ]
     print("Testing SplitPolygonTool...")
-    formatted_split = _format_tool_calls(split_calls)
-    split_responses, split_images, split_successes, split_active = env.step(formatted_split)
-    _assert_true(split_active[0], "Environment reported inactive batch entry during split test")
-    _assert_tool_success(split_successes[0], "SplitPolygonTool")
-    print("Split response:", split_responses[0])
-    _save_image(split_images[0], artifacts_dir, "01_after_split")
+    _execute_tool(
+        env,
+        split_calls,
+        tool_name="SplitPolygonTool",
+        artifact_label="01_after_split",
+        artifacts_dir=artifacts_dir,
+    )
 
     component = env.components[0]
-    named_instances = getattr(component, "named_instances", {}) or {}
+    named_instances = getattr(component, "named_instances", None)
+    _assert_true(isinstance(named_instances, dict), "Component missing named reference map")
+    dbu = component.kcl.dbu
     _assert_true("p1" not in named_instances, "Original polygon reference still present after split")
     for part_name in ("p1_part1", "p1_part2"):
         _assert_true(part_name in named_instances, f"Missing split output '{part_name}'")
@@ -104,12 +142,13 @@ def main() -> None:
         }
     ]
     print("Testing MovePolygonTool...")
-    formatted_move = _format_tool_calls(move_calls)
-    move_responses, move_images, move_successes, move_active = env.step(formatted_move)
-    _assert_true(move_active[0], "Environment reported inactive batch entry during move test")
-    _assert_tool_success(move_successes[0], "MovePolygonTool")
-    print("Move response:", move_responses[0])
-    _save_image(move_images[0], artifacts_dir, "02_after_move")
+    _execute_tool(
+        env,
+        move_calls,
+        tool_name="MovePolygonTool",
+        artifact_label="02_after_move",
+        artifacts_dir=artifacts_dir,
+    )
 
     post_move_center = tuple(named_instances["p1_part1"].center)
     dx_applied = post_move_center[0] - pre_move_center[0]
@@ -120,20 +159,69 @@ def main() -> None:
         f"MovePolygonTool delta mismatch: expected ({MOVE_DX}, {MOVE_DY}) got ({dx_applied}, {dy_applied})",
     )
 
-    print("Running DRC check after tool operations...")
-    final_drc = env.get_drc_violations()[0]
-    _assert_true(
-        final_drc["count"] > 0,
-        "Expected at least one DRC violation after split and move operations",
+    pre_offset_width, pre_offset_height = _bbox_dimensions_um(named_instances["p1_part2"], dbu)
+    offset_calls = [
+        {
+            "name": "op_offset_polygon",
+            "arguments": {
+                "polygon_name": "p1_part2",
+                "distance": OFFSET_DISTANCE,
+                "layer": [1, 0],
+            },
+        }
+    ]
+    print("Testing OffsetPolygonTool...")
+    _execute_tool(
+        env,
+        offset_calls,
+        tool_name="OffsetPolygonTool",
+        artifact_label="03_after_offset",
+        artifacts_dir=artifacts_dir,
     )
-    print("DRC errors detected:")
+
+    post_offset_width, post_offset_height = _bbox_dimensions_um(named_instances["p1_part2"], dbu)
+    expected_delta = 2.0 * OFFSET_DISTANCE
+    width_delta = post_offset_width - pre_offset_width
+    height_delta = post_offset_height - pre_offset_height
+    _assert_true(
+        math.isclose(width_delta, expected_delta, rel_tol=1e-6, abs_tol=5e-3)
+        and math.isclose(height_delta, expected_delta, rel_tol=1e-6, abs_tol=5e-3),
+        (
+            "OffsetPolygonTool did not expand geometry by the expected amount: "
+            f"Δw={width_delta}, Δh={height_delta}, expected {expected_delta}"
+        ),
+    )
+
+    print("Running DRC check after move/offset operations...")
+    mid_drc = env.get_drc_violations()[0]
+    _assert_true(mid_drc["count"] > 0, "Expected DRC violations after move/offset operations")
+    print("Intermediate DRC errors detected:")
+    print(mid_drc["errors_text"])
+
+    delete_calls = [
+        {"name": "op_delete_polygon", "arguments": {"polygon_name": "p1_part2"}}
+    ]
+    print("Testing DeletePolygonTool...")
+    _execute_tool(
+        env,
+        delete_calls,
+        tool_name="DeletePolygonTool",
+        artifact_label="04_after_delete",
+        artifacts_dir=artifacts_dir,
+    )
+
+    _assert_true(
+        "p1_part2" not in named_instances,
+        "DeletePolygonTool failed to remove the target reference",
+    )
+
+    print("Running final DRC check after delete...")
+    final_drc = env.get_drc_violations()[0]
+    _assert_true(final_drc["count"] == 0, "Expected clean layout after delete operation")
+    print("Final DRC errors text (should be empty):")
     print(final_drc["errors_text"])
 
-    _save_image(env.get_image(0), artifacts_dir, "03_final_layout")
-    if final_drc["bboxes"]:
-        violation_zoom = env.get_image(0, bbox=final_drc["bboxes"][0])
-        _save_image(violation_zoom, artifacts_dir, "04_violation_zoom")
-
+    _save_image(env.get_image(0), artifacts_dir, "05_final_layout")
     print("All tool tests completed successfully.")
 
 
