@@ -71,6 +71,149 @@ def _get_kdb_cell(component: GDSComponent) -> Any:
     return getattr(component, "cell", None)
 
 
+def _format_netlist_payload(component: GDSComponent) -> str | None:
+    """Serialize ``component.netlist`` output to a JSON string when available."""
+
+    try:
+        netlist_payload = component.netlist()
+    except AttributeError:
+        return None
+
+    if isinstance(netlist_payload, str):
+        netlist_payload = netlist_payload.strip()
+        return netlist_payload or None
+
+    if isinstance(netlist_payload, dict):
+        if not netlist_payload:
+            return None
+        return json.dumps(netlist_payload, ensure_ascii=False, indent=2, sort_keys=True)
+
+    if netlist_payload:
+        try:
+            return json.dumps(netlist_payload, ensure_ascii=False, default=str)
+        except TypeError:
+            return str(netlist_payload)
+
+    return None
+
+
+def _reference_bbox(reference: Any) -> Dict[str, float] | None:
+    """Return a JSON-serializable bbox description for ``reference``."""
+
+    bbox_candidate = None
+    bbox_method = getattr(reference, "bbox", None)
+    if callable(bbox_method):
+        try:
+            bbox_candidate = bbox_method()
+        except Exception:
+            bbox_candidate = None
+    elif bbox_method is not None:
+        bbox_candidate = bbox_method
+
+    if bbox_candidate is None:
+        return None
+
+    def _extract_value(obj: Any, *names: str) -> float | None:
+        for name in names:
+            value = getattr(obj, name, None)
+            if value is not None:
+                try:
+                    return float(value)
+                except Exception:
+                    continue
+        return None
+
+    xmin = _extract_value(bbox_candidate, "xmin", "left")
+    xmax = _extract_value(bbox_candidate, "xmax", "right")
+    ymin = _extract_value(bbox_candidate, "ymin", "bottom")
+    ymax = _extract_value(bbox_candidate, "ymax", "top")
+
+    coords = {k: v for k, v in {"xmin": xmin, "xmax": xmax, "ymin": ymin, "ymax": ymax}.items() if v is not None}
+    return coords or None
+
+
+def _reference_center(reference: Any) -> Tuple[float, float] | None:
+    center = getattr(reference, "center", None)
+    if center is None:
+        bbox = _reference_bbox(reference)
+        if not bbox:
+            return None
+        try:
+            cx = (bbox["xmin"] + bbox["xmax"]) / 2.0
+            cy = (bbox["ymin"] + bbox["ymax"]) / 2.0
+            return (cx, cy)
+        except Exception:
+            return None
+
+    try:
+        return (float(center[0]), float(center[1]))
+    except Exception:
+        return None
+
+
+def _build_reference_snapshot(component: GDSComponent) -> Dict[str, Any]:
+    """Create a lightweight JSON-serializable schematic for ``component``."""
+
+    info = component.info if isinstance(getattr(component, "info", None), dict) else {}
+    labels = info.get("polygon_labels") if isinstance(info, dict) else None
+    if not isinstance(labels, list):
+        labels = []
+
+    label_lookup: Dict[str, Dict[str, Any]] = {}
+    for entry in labels:
+        if not isinstance(entry, dict):
+            continue
+        name = entry.get("name")
+        if not name:
+            continue
+        label_lookup[str(name)] = {
+            "layer": entry.get("layer_index"),
+            "centroid": entry.get("centroid"),
+        }
+
+    named_instances = getattr(component, "named_instances", None)
+    if isinstance(named_instances, dict) and named_instances:
+        reference_iter: Iterable[Tuple[str | None, Any]] = named_instances.items()
+    else:
+        reference_iter = ((getattr(ref, "name", None), ref) for ref in _iter_references(component))
+
+    references: List[Dict[str, Any]] = []
+    seen_ids: set[int] = set()
+    for raw_name, reference in reference_iter:
+        if reference is None:
+            continue
+        ref_id = id(reference)
+        if ref_id in seen_ids:
+            continue
+        seen_ids.add(ref_id)
+
+        name = raw_name or getattr(reference, "name", None)
+        if not name:
+            name = f"ref_{len(references)}"
+
+        bbox = _reference_bbox(reference)
+        center = _reference_center(reference)
+        references.append(
+            {
+                "name": str(name),
+                "bbox": bbox,
+                "center": center,
+                "label": label_lookup.get(str(name)),
+            }
+        )
+
+    snapshot = {
+        "component": getattr(component, "name", "component"),
+        "reference_count": len(references),
+        "references": references,
+    }
+
+    if info:
+        snapshot["info_keys"] = sorted(str(key) for key in info.keys())
+
+    return snapshot
+
+
 class DRCToolEnv(BaseImageToolEnv):
     """Environment that applies geometry tools to gdsfactory components."""
 
@@ -227,10 +370,11 @@ class DRCToolEnv(BaseImageToolEnv):
         component = self.components[item_index]
         if component is None:
             return "{}"
-        try:
-            return component.netlist()
-        except AttributeError:
-            return "{}"
+        netlist_payload = _format_netlist_payload(component)
+        if netlist_payload:
+            return netlist_payload
+        snapshot = _build_reference_snapshot(component)
+        return json.dumps(snapshot, ensure_ascii=False)
 
     # ------------------------------------------------------------------
     def get_image(
