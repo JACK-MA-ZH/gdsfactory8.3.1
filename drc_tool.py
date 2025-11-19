@@ -9,8 +9,9 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 import sys
 
-import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
 from matplotlib.patches import Polygon
 import numpy as np
 from PIL import Image
@@ -60,8 +61,26 @@ except ImportError:  # pragma: no cover - simple fallback for local testing
             raise NotImplementedError
 
 
-_COLOR_CYCLE = plt.rcParams.get("axes.prop_cycle", None)
+_COLOR_CYCLE = rcParams.get("axes.prop_cycle", None)
 POLYGON_LABELS_KEY = "polygon_labels"
+
+
+def _close_figure(fig: Figure, canvas: FigureCanvasAgg | None = None) -> None:
+    """Release resources associated with ``fig`` without touching ``plt`` globals."""
+
+    candidate = canvas or getattr(fig, "canvas", None)
+    if candidate is not None:
+        close = getattr(candidate, "close", None)
+        if callable(close):
+            try:
+                close()
+            except Exception:
+                pass
+
+    try:
+        fig.clf()
+    except Exception:
+        pass
 
 
 def _install_component_attribute(name: str) -> None:
@@ -335,7 +354,8 @@ def plot_with_labels_and_vertices(
     """Plot component polygons, annotating vertices and polygon names."""
 
     polygons_by_layer = component_to_plot.get_polygons_points()
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.add_subplot(111)
     colors = (_COLOR_CYCLE.by_key()["color"] if _COLOR_CYCLE else ["tab:blue"])
     color_count = len(colors)
     color_index = 0
@@ -422,7 +442,7 @@ def component_to_pil_image(
         1,
     )
     image = image.copy()
-    plt.close(fig)
+    _close_figure(fig, canvas)
     return image
 
 
@@ -728,14 +748,13 @@ def _run_tool_and_plot(
     fig, _ax = plot_with_labels_and_vertices(comp, title=title)
     output_path = output_dir / f"{title.replace(' ', '_').lower()}.png"
     fig.savefig(output_path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
+    _close_figure(fig)
     print(f"[{tool.name}] {title}: {result}")
     print(f"Saved plot to: {output_path.resolve()}")
     return result
 
 
 if __name__ == "__main__":
-    plt.switch_backend("Agg")
     output_directory = Path("drc_demo_outputs")
     output_directory.mkdir(parents=True, exist_ok=True)
 
@@ -743,7 +762,7 @@ if __name__ == "__main__":
     fig, _ = plot_with_labels_and_vertices(demo_component, "Initial component state")
     initial_path = output_directory / "initial_component_state.png"
     fig.savefig(initial_path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
+    _close_figure(fig)
     print(f"Saved plot to: {initial_path.resolve()}")
 
     move_tool = MovePolygonTool()
