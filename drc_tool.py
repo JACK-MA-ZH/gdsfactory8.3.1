@@ -9,8 +9,9 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 import sys
 
-import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
 from matplotlib.patches import Polygon
 import numpy as np
 from PIL import Image
@@ -21,9 +22,34 @@ from PIL import Image
 
 import gdsfactory as gf
 from gdsfactory import get_layer
-from gdsfactory.boolean import get_ref_shapes
 from gdsfactory.typings import component
 import klayout.db as kdb
+# ``get_ref_shapes`` was introduced after gdsfactory==8.3.1.  The public
+# API for :mod:`drc_tool` only needs a small subset of its functionality, so we
+# provide a light-weight fallback when running against the older release.
+try:  # pragma: no cover - exercised indirectly via the CLI scripts
+    from gdsfactory.boolean import get_ref_shapes
+except ImportError:  # pragma: no cover - compatibility shim for gf==8.3.1
+    def get_ref_shapes(reference: component, layer: int | tuple[int, int]) -> kdb.Region:
+        """Return the shapes of ``reference`` on ``layer`` as a ``kdb.Region``.
+
+        ``gdsfactory`` 8.3.1 does not ship ``get_ref_shapes``.  The helper is
+        implemented here so that the rest of the toolchain can stay agnostic to
+        the installed version.  Only the functionality that is required by the
+        DRC tools is reproduced: extract the polygons for the provided
+        component reference and apply its transformation.
+        """
+
+        layer_index = get_layer(layer)
+        ref_cell = getattr(reference, "cell", None)
+        if ref_cell is None:
+            raise TypeError("reference must provide a 'cell' attribute with shapes")
+
+        region = kdb.Region(ref_cell.begin_shapes_rec(layer_index))
+        cplx_trans = getattr(reference, "cplx_trans", None)
+        if cplx_trans is not None:
+            region = region.transformed(cplx_trans)
+        return region
 
 try:  # pragma: no cover - optional dependency when running outside the agent stack
     from agent_r1.tool.base import BaseTool
@@ -35,8 +61,49 @@ except ImportError:  # pragma: no cover - simple fallback for local testing
             raise NotImplementedError
 
 
-_COLOR_CYCLE = plt.rcParams.get("axes.prop_cycle", None)
+_COLOR_CYCLE = rcParams.get("axes.prop_cycle", None)
 POLYGON_LABELS_KEY = "polygon_labels"
+
+
+def _close_figure(fig: Figure, canvas: FigureCanvasAgg | None = None) -> None:
+    """Release resources associated with ``fig`` without touching ``plt`` globals."""
+
+    candidate = canvas or getattr(fig, "canvas", None)
+    if candidate is not None:
+        close = getattr(candidate, "close", None)
+        if callable(close):
+            try:
+                close()
+            except Exception:
+                pass
+
+    try:
+        fig.clf()
+    except Exception:
+        pass
+
+
+def _install_component_attribute(name: str) -> None:
+    """Allow dynamic attributes on :class:`gf.Component` for legacy scripts."""
+
+    existing = getattr(gf.Component, name, None)
+    original_getter = existing.fget if isinstance(existing, property) else None
+    storage_name = f"_drc_{name}"
+
+    def _getter(self: gf.Component) -> Any:
+        return getattr(self, storage_name, None)
+
+    def _setter(self: gf.Component, value: Any) -> None:
+        object.__setattr__(self, storage_name, value)
+
+    setattr(gf.Component, name, property(_getter, _setter))
+
+    if original_getter is not None:
+        setattr(gf.Component, f"_original_{name}", property(original_getter))
+
+
+for _attr in ("named_instances", "named_references"):
+    _install_component_attribute(_attr)
 
 
 def _iter_references(comp: component) -> Iterable[gf.ComponentReference]:
@@ -66,13 +133,66 @@ def _remove_reference_name(component: component, name: str) -> None:
     mapping.pop(name, None)
 
 
+def _destroy_layout_instance(reference: gf.ComponentReference) -> bool:
+    """Try to destroy the underlying KLayout instance for ``reference``."""
+
+    candidate = getattr(reference, "_kfinst", reference)
+    candidate = getattr(candidate, "_instance", candidate)
+    for method_name in ("delete", "destroy"):
+        method = getattr(candidate, method_name, None)
+        if method is None:
+            continue
+        try:
+            method()
+            return True
+        except Exception:
+            continue
+    return False
+
+
 def _remove_reference(component: component, reference: gf.ComponentReference) -> None:
-    if hasattr(component, "insts") and reference in component.insts:
-        component.insts.remove(reference)
-    elif hasattr(component, "references") and reference in component.references:
-        component.references.remove(reference)
-    else:
+    removed = False
+
+    insts = getattr(component, "insts", None)
+    if insts is not None:
+        try:
+            # ``ComponentReferences`` implements ``__delitem__`` and expects the
+            # actual reference object (or integer index).  Relying on the
+            # low-level ``_kfinst`` handle (as newer versions do) does not work
+            # on gdsfactory 8.3.1 because the container maintains its own list.
+            del insts[reference]
+            removed = True
+        except Exception:
+            pass
+
+    refs = getattr(component, "references", None)
+    if refs is not None:
+        try:
+            refs.remove(reference)
+            removed = True
+        except (AttributeError, ValueError):
+            pass
+
+    layout_removed = _destroy_layout_instance(reference)
+
+    if not removed and not layout_removed:
         raise ValueError("Component reference not found; cannot remove.")
+
+
+def _component_region(comp: gf.Component, layer_index: int) -> kdb.Region:
+    """Return a :class:`kdb.Region` containing the shapes on ``layer_index``."""
+
+    cell = _get_kdb_cell(comp)
+    return kdb.Region(cell.begin_shapes_rec(layer_index))
+
+
+def _get_kdb_cell(comp: gf.Component) -> kdb.Cell:
+    cell = getattr(comp, "kdb_cell", None)
+    if cell is None:
+        cell = getattr(comp, "_kdb_cell", None)
+    if cell is None:
+        raise AttributeError("Component does not expose a KLayout cell")
+    return cell
 
 
 def polygon_centroid(points: np.ndarray) -> Tuple[float, float]:
@@ -105,11 +225,47 @@ def polygon_centroid(points: np.ndarray) -> Tuple[float, float]:
     return float(cx), float(cy)
 
 
+def _active_reference_names(component_to_plot: component) -> set[str]:
+    """Return the set of currently active reference names on ``component_to_plot``."""
+
+    names: set[str] = set()
+    named_instances = getattr(component_to_plot, "named_instances", None)
+    if isinstance(named_instances, dict):
+        for name, reference in named_instances.items():
+            if reference is not None and name:
+                names.add(str(name))
+
+    if not names:
+        for reference in _iter_references(component_to_plot):
+            ref_name = getattr(reference, "name", None)
+            if ref_name:
+                names.add(str(ref_name))
+
+    return names
+
+
+def _log_reference_inventory(component_to_plot: component, context: str) -> None:
+    names = sorted(_active_reference_names(component_to_plot))
+    print(f"[drc_tool] {context} active references: {names}")
+
+
 def _build_label_lookup(component_to_plot: component) -> List[Dict[str, object]]:
     labels = getattr(component_to_plot, "info", {}).get(POLYGON_LABELS_KEY, [])
-    if isinstance(labels, Iterable):
-        return [dict(entry) for entry in labels]
-    return []
+    if not isinstance(labels, Iterable):
+        return []
+
+    active_names = _active_reference_names(component_to_plot)
+    filtered: List[Dict[str, object]] = []
+    for entry in labels:
+        if not isinstance(entry, dict):
+            continue
+        entry_name = entry.get("name")
+        if entry_name:
+            entry_name = str(entry_name)
+            if active_names and entry_name not in active_names:
+                continue
+        filtered.append(dict(entry, name=entry_name))
+    return filtered
 
 
 def _find_polygon_label(
@@ -198,7 +354,8 @@ def plot_with_labels_and_vertices(
     """Plot component polygons, annotating vertices and polygon names."""
 
     polygons_by_layer = component_to_plot.get_polygons_points()
-    fig, ax = plt.subplots()
+    fig = Figure()
+    ax = fig.add_subplot(111)
     colors = (_COLOR_CYCLE.by_key()["color"] if _COLOR_CYCLE else ["tab:blue"])
     color_count = len(colors)
     color_index = 0
@@ -285,7 +442,7 @@ def component_to_pil_image(
         1,
     )
     image = image.copy()
-    plt.close(fig)
+    _close_figure(fig, canvas)
     return image
 
 
@@ -406,7 +563,8 @@ class OffsetPolygonTool(DRCBaseTool):
         _remove_reference_name(component, polygon_name)
 
         new_component = gf.Component(name=f"{polygon_name}_offset")
-        new_component.kdb_cell.shapes(layer_index).insert(region)
+        target_cell = _get_kdb_cell(new_component)
+        target_cell.shapes(layer_index).insert(region)
 
         new_reference = component.add_ref(new_component, name=polygon_name)
         _register_reference_name(component, polygon_name, new_reference)
@@ -456,6 +614,7 @@ class SplitPolygonTool(DRCBaseTool):
     @staticmethod
     def _build_half_plane_masks(
         reference: gf.ComponentReference,
+        polygon_name: str,
         axis: str,
         value: float,
         layer: tuple[int, int],
@@ -469,8 +628,8 @@ class SplitPolygonTool(DRCBaseTool):
         span_y = abs(ymax - ymin)
         margin = max(span_x, span_y, 1.0) * 2.0
 
-        low = gf.Component(name="split_half_low")
-        high = gf.Component(name="split_half_high")
+        low = gf.Component(name=f"{polygon_name}_split_half_low")
+        high = gf.Component(name=f"{polygon_name}_split_half_high")
 
         if axis == "x":
             x_low = min(xmin - margin, value - margin)
@@ -518,20 +677,40 @@ class SplitPolygonTool(DRCBaseTool):
 
         reference = self._get_reference(component, polygon_name)
 
-        low_mask, high_mask = self._build_half_plane_masks(reference, axis, value, layer_tuple)
-        first_half = gf.boolean(reference, low_mask, operation="and", layer=layer_tuple)
-        second_half = gf.boolean(reference, high_mask, operation="and", layer=layer_tuple)
+        layer_index = get_layer(layer_tuple)
+        region = get_ref_shapes(reference, layer_index)
+
+        low_mask, high_mask = self._build_half_plane_masks(
+            reference,
+            polygon_name,
+            axis,
+            value,
+            layer_tuple,
+        )
+        low_region = _component_region(low_mask, layer_index)
+        high_region = _component_region(high_mask, layer_index)
+
+        first_region = region & low_region
+        second_region = region & high_region
 
         _remove_reference(component, reference)
         _remove_reference_name(component, polygon_name)
 
         new_refs: List[str] = []
-        if first_half.get_polygons():
-            ref_first = component.add_ref(first_half, name=f"{polygon_name}_part1")
+
+        if not first_region.is_empty():
+            first_component = gf.Component(name=f"{polygon_name}_part1")
+            first_cell = _get_kdb_cell(first_component)
+            first_cell.shapes(layer_index).insert(first_region)
+            ref_first = component.add_ref(first_component, name=first_component.name)
             _register_reference_name(component, ref_first.name, ref_first)
             new_refs.append(ref_first.name)
-        if second_half.get_polygons():
-            ref_second = component.add_ref(second_half, name=f"{polygon_name}_part2")
+
+        if not second_region.is_empty():
+            second_component = gf.Component(name=f"{polygon_name}_part2")
+            second_cell = _get_kdb_cell(second_component)
+            second_cell.shapes(layer_index).insert(second_region)
+            ref_second = component.add_ref(second_component, name=second_component.name)
             _register_reference_name(component, ref_second.name, ref_second)
             new_refs.append(ref_second.name)
 
@@ -565,17 +744,17 @@ def _run_tool_and_plot(
     """Execute a tool, plot the result, and persist the figure."""
 
     result = tool.execute(args=args, component=comp)
+    _log_reference_inventory(comp, context=title)
     fig, _ax = plot_with_labels_and_vertices(comp, title=title)
     output_path = output_dir / f"{title.replace(' ', '_').lower()}.png"
     fig.savefig(output_path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
+    _close_figure(fig)
     print(f"[{tool.name}] {title}: {result}")
     print(f"Saved plot to: {output_path.resolve()}")
     return result
 
 
 if __name__ == "__main__":
-    plt.switch_backend("Agg")
     output_directory = Path("drc_demo_outputs")
     output_directory.mkdir(parents=True, exist_ok=True)
 
@@ -583,7 +762,7 @@ if __name__ == "__main__":
     fig, _ = plot_with_labels_and_vertices(demo_component, "Initial component state")
     initial_path = output_directory / "initial_component_state.png"
     fig.savefig(initial_path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
+    _close_figure(fig)
     print(f"Saved plot to: {initial_path.resolve()}")
 
     move_tool = MovePolygonTool()
